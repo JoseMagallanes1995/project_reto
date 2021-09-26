@@ -1,0 +1,181 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "\"Permite calcular el tipo de cambio de moneda y Configurar la tasa de cambio\"",
+    "version": "1.0.0",
+    "title": "Api Application Exchange Rate",
+    "contact": {
+      "name": "jandresmagallanes@gmail.com"
+    },
+    "license": {
+      "name": "Swagger.io"
+    }
+  },
+  "host": "localhost:9085",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "CurrencyChangeController"
+    }
+  ],
+  "paths": {
+    "/application/services/exchange-rate/v1/calculate": {
+      "post": {
+        "tags": [
+          "CurrencyChangeController"
+        ],
+        "summary": "Calcular Tipo de Cambio",
+        "operationId": "calculateExchangeRate",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "exchangeRateRequest",
+            "description": "Parametro de entrada para realizar el tipo de cambio",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ExchangeRateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ExchangeRateResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/application/services/exchange-rate/v1/setting": {
+      "post": {
+        "tags": [
+          "CurrencyChangeController"
+        ],
+        "summary": "Configura el valor de la tasa de Cambio",
+        "operationId": "settingRate",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "exchangeRateSettingRequest",
+            "description": "Parametros de entrada para la tasa de cambio",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ExchangeRateSettingRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ExchangeRateRequest": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "example": 25.6
+        },
+        "currencySrc": {
+          "$ref": "#/definitions/BaseModel"
+        },
+        "currencyDest": {
+          "$ref": "#/definitions/BaseModel"
+        }
+      }
+    },
+    "ExchangeRateResponse": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "example": 25.6
+        },
+        "exchangeRate": {
+          "$ref": "#/definitions/ExchangeRate"
+        },
+        "currencySrc": {
+          "$ref": "#/definitions/BaseModel"
+        },
+        "currencyDest": {
+          "$ref": "#/definitions/BaseModel"
+        }
+      }
+    },
+    "BaseModel": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "example": "USD"
+        }
+      }
+    },
+    "ExchangeRate": {
+      "type": "object",
+      "properties": {
+        "rate": {
+          "type": "number",
+          "format": "double",
+          "example": 4.11
+        },
+        "equivalentAmount": {
+          "type": "number",
+          "format": "double",
+          "example": 100.11
+        }
+      }
+    },
+    "ExchangeRateSettingRequest": {
+      "type": "object",
+      "properties": {
+        "exchangeRate": {
+          "$ref": "#/definitions/ExchangeRate"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,85 @@
+{
+	"info": {
+		"_postman_id": "9dcfcadc-7846-45de-8662-b23f30145f35",
+		"name": "TEST_RETO",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CALCULATE EXCHANGE RATE",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": 2.5,\r\n    \"currencySrc\": {\r\n        \"code\": \"USD\"\r\n    },\r\n    \"currencyDest\": {\r\n        \"code\": \"PEN\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9805/application/services/exchange-rate/v1/calculate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9805",
+					"path": [
+						"application",
+						"services",
+						"exchange-rate",
+						"v1",
+						"calculate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SETTING RATE",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"exchangeRate\": {\r\n        \"rate\": 4.11\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9805/application/services/exchange-rate/v1/setting",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9805",
+					"path": [
+						"application",
+						"services",
+						"exchange-rate",
+						"v1",
+						"setting"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
