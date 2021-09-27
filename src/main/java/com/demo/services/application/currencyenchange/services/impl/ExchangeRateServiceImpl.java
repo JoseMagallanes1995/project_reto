@@ -1,13 +1,12 @@
 package com.demo.services.application.currencyenchange.services.impl;
 
-import com.demo.services.application.currencyenchange.dao.CurrencyExchangeEntity;
+import com.demo.services.application.currencyenchange.dao.CurrencyExchangeDao;
 import com.demo.services.application.currencyenchange.model.domain.ExchangeDomain;
 import com.demo.services.application.currencyenchange.model.domain.ExchangeRateDomain;
-import com.demo.services.application.currencyenchange.repository.CurrencyRepository;
 import com.demo.services.application.currencyenchange.services.ExchangeRateService;
 import io.reactivex.Completable;
 import io.reactivex.Single;
-import java.util.Optional;
+import io.reactivex.schedulers.Schedulers;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,25 +32,25 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class ExchangeRateServiceImpl implements ExchangeRateService {
 
-  CurrencyRepository repository;
+  CurrencyExchangeDao currencyExchangeDao;
 
   @Override
   public Single<ExchangeDomain> calculateExchangeRate(ExchangeDomain exchangeDomain) {
-    double rate = Optional.ofNullable(repository.findByRate()).isPresent()
-        ? repository.findByRate().getRate() : 4.11;
+    return currencyExchangeDao.findRate(exchangeDomain)
+        .subscribeOn(Schedulers.io())
+        .flatMap(data -> Single.just(ExchangeDomain.builder()
+            .exchangeRate(ExchangeRateDomain.builder()
+                .rate(data.getRate())
+                .equivalentAmount(calculateAmount(exchangeDomain, data.getRate()))
+                .build())
+            .currencySrc(exchangeDomain.getCurrencySrc())
+            .currencyDest(exchangeDomain.getCurrencyDest())
+            .amount(exchangeDomain.getAmount())
+            .build()));
 
-    return Single.just(ExchangeDomain.builder()
-        .exchangeRate(ExchangeRateDomain.builder()
-            .rate(rate)
-            .equivalentAmount(calculateAmount(exchangeDomain, rate))
-            .build())
-        .currencySrc(exchangeDomain.getCurrencySrc())
-        .currencyDest(exchangeDomain.getCurrencyDest())
-        .amount(exchangeDomain.getAmount())
-        .build());
   }
 
-  private Double calculateAmount(ExchangeDomain exchangeDomain, double rate) {
+  private double calculateAmount(ExchangeDomain exchangeDomain, double rate) {
     double convertAmount = 0;
     if (!exchangeDomain.getCurrencySrc().getCode()
         .equals(exchangeDomain.getCurrencyDest().getCode())) {
@@ -66,7 +65,6 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
         default:
           break;
       }
-
     }
     return convertAmount;
 
@@ -75,19 +73,8 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
 
   @Override
   public Completable settingRate(ExchangeDomain exchangeDomain) {
-
-    CurrencyExchangeEntity entity = repository.findByRate();
-    if (entity == null) {
-      entity = new CurrencyExchangeEntity();
-      entity.setRate(exchangeDomain.getExchangeRate().getRate());
-      entity.setId(1);
-    } else {
-      entity.setRate(exchangeDomain.getExchangeRate().getRate());
-    }
-
-    repository.save(entity);
-
-    return Completable.complete();
+    return Single.fromCallable(() -> exchangeDomain)
+        .flatMapCompletable(currencyExchangeDao::saveRateDao);
   }
 
 }

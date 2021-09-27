@@ -1,6 +1,6 @@
 package com.demo.services.application.currencyenchange.repository;
 
-import com.demo.services.application.currencyenchange.dao.CurrencyExchangeEntity;
+import com.demo.services.application.currencyenchange.dao.entity.CurrencyExchangeEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package com.demo.services.application.currencyenchange.dao;
+package com.demo.services.application.currencyenchange.dao.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

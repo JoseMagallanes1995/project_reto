@@ -1,11 +1,12 @@
-package com.demo.services.application.currencyenchange.services;
+package com.demo.services.application.currencyenchange.dao;
 
+import com.demo.services.application.currencyenchange.dao.entity.CurrencyExchangeEntity;
 import com.demo.services.application.currencyenchange.model.domain.ExchangeDomain;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
 /**
- * <b>Class</b>: ExchangeRateService<br/>
+ * <b>Class</b>: CurrencyExchangeDao<br/>
  * <b>Copyright</b>: &copy; 2021<br/>
  * <b>Company</b> : <br/>
  *
@@ -17,15 +18,15 @@ import io.reactivex.Single;
  * </ul>
  * <u>Changes</u>:<br/>
  * <ul>
- * <li>24/09/2021 Creaci&oacute;n de Clase.</li>
+ * <li>26/09/2021 Creaci&oacute;n de Clase.</li>
  * </ul>
  * @version 1.0
  */
 
-public interface ExchangeRateService {
+public interface CurrencyExchangeDao {
 
-  Single<ExchangeDomain> calculateExchangeRate(ExchangeDomain exchangeDomain);
+  Single<CurrencyExchangeEntity> findRate(ExchangeDomain data);
 
-  Completable settingRate (ExchangeDomain exchangeDomain);
+  Completable saveRateDao(ExchangeDomain data);
 
 }

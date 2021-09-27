@@ -51,7 +51,7 @@ public class CurrencyChangeController {
         .flatMap(mapper::domainToResponse);
   }
 
-  @PostMapping(value = "/setting", produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = "/setting", consumes = MediaType.APPLICATION_JSON_VALUE)
   public Completable settingRate(@Valid @RequestBody ExchangeRateSettingRequest request) {
 
     return Single.fromCallable(() -> mapper.requestSettingToDomain(request))
